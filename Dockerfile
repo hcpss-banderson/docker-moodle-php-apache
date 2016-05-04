@@ -18,7 +18,16 @@ RUN rm -rf /srv/provisioning
 COPY apache2-foreground /usr/local/bin/
 COPY docker-entrypoint.sh /entrypoint.sh
 
-VOLUME ["/var/www"]
+# It makes sense to me to define the web root as a volume at this time as we 
+# have just installed the webserver which makes this directory significant. 
+# However, doing so makes the directory unusable for derived docker images as 
+# any further changes to it would be reverted to the state it was in when it was 
+# first declaired a volume.
+# 
+# There is some debate over whether this behavior is a feature or a bug:
+#
+# https://github.com/docker/docker/issues/3639
+# VOLUME ["/var/www"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 
